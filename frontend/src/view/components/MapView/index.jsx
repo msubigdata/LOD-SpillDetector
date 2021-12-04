@@ -20,6 +20,9 @@ import markerIconO from 'assets/icons/marker-alert-orange.svg';
 import L from 'leaflet';
 import './styleFix';
 import './styles/main.scss';
+import axios from 'axios';
+
+import { useAxios } from '../../../hooks/useAxios';
 
 const southWest = L.latLng(-90, -200);
 const northEast = L.latLng(90, 200);
@@ -27,6 +30,13 @@ const bounds = L.latLngBounds(southWest, northEast);
 
 export const MapView = ({ markers, activeReg, mapRef, setMapRef }) => {
     const [markerData, setMarkerData] = useState(markers);
+
+    const inspectArea = async (area) => {
+        const response = await axios.post('/api/v1/inspect/', {
+            bbox: area,
+        });
+        alert(response.data.water);
+    };
 
     useEffect(() => {
         setMarkerData(markers);
@@ -91,6 +101,7 @@ export const MapView = ({ markers, activeReg, mapRef, setMapRef }) => {
                 <Marker
                     eventHandlers={{
                         click: () => {
+                            inspectArea(marker.area[0]);
                             mapRef.setView(
                                 [
                                     (marker.area[0][1][0] +
