@@ -1,0 +1,42 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "plugin:react/recommended",
+        "plugin:import/recommended",
+        "airbnb",
+        "plugin:prettier/recommended",
+        "prettier"
+    ],
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+    "plugins": ["react"],
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "extensions": [".js", ".jsx"],
+                "moduleDirectory": ["node_modules", "src/"]
+            }
+        }
+    },
+    "rules": {
+        "prettier/prettier": [
+            "warn",
+            { "singleQuote": true, "endOfLine": "auto", "tabWidth": 4 }
+        ],
+        "no-unused-vars": "warn",
+        "no-use-before-define": "off",
+        "react/jsx-filename-extension": ["warn", { "extensions": [".jsx"] }],
+        "max-len": ["warn", { "code": 80 }],
+        "prefer-arrow-callback": "off",
+        "indent": "off",
+        "import/prefer-default-export": "off"
+    }
+}

@@ -1,0 +1,13 @@
+#!/bin/sh
+
+dirs_where_lookup=('api' 'site_manager')
+
+for dir in "${dirs_where_lookup[@]}"; do
+  find . -type f \( \
+        -path "*$dir/*migrations/*initial*" \
+        -o -path "*$dir/*/migrations/*auto*" \
+        -o -path "*$dir/*/migrations/*0*.py" \) \
+         -delete
+done
+
+echo "Migrations cleared!"

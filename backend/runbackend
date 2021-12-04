@@ -1,0 +1,33 @@
+#!/bin/bash
+
+if [ -d "backend" ]; then
+    cd backend
+fi
+
+
+python3 manage.py makemigrations
+
+python3 manage.py migrate
+
+cat create_superuser.py | python3 manage.py shell
+
+if [[ -n "$COLLECT_STATIC" ]]; then \
+    if [ "$COLLECT_STATIC" = "1" ]; then \
+        python3 manage.py collectstatic --noinput
+    fi
+    else \
+      python3 manage.py collectstatic --noinput
+fi
+
+# Heroku or run without docker
+if [[ -z "$DEBUG" ]]; then
+  touch /tmp/app-initialized; \
+fi
+
+python3 bootstrap_database.py
+
+if [ "$DEBUG" = "1" ]; then \
+    python3 manage.py runserver "0.0.0.0:${BACKEND_PORT:-8000}";  \
+    else \
+    gunicorn django_app.wsgi -b :"${BACKEND_PORT:-8000}" --log-file -; \
+fi

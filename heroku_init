@@ -1,0 +1,20 @@
+#!/bin/bash
+
+source .env
+
+heroku buildpacks:clear --app $HEROKU_TEST_APP_NAME
+heroku buildpacks:add https://github.com/SectorLabs/heroku-buildpack-subdir.git --app $HEROKU_TEST_APP_NAME
+heroku config:set USE_DROPBOX=$DJANGO_USE_DROPBOX --app $HEROKU_TEST_APP_NAME
+heroku config:set USE_BOOTSTRAP_DB=$DJANGO_USE_BOOTSTRAP_DB --app $HEROKU_TEST_APP_NAME
+heroku config:set USE_BOOTSTRAP_PRUNE_DB=$DJANGO_USE_BOOTSTRAP_PRUNE_DB --app $HEROKU_TEST_APP_NAME
+heroku config:set COLLECT_STATIC=$DJANGO_COLLECT_STATIC --app $HEROKU_TEST_APP_NAME
+
+heroku buildpacks:clear --app $HEROKU_PROD_APP_NAME
+heroku buildpacks:add https://github.com/SectorLabs/heroku-buildpack-subdir.git --app $HEROKU_PROD_APP_NAME
+heroku config:set USE_DROPBOX=1 --app $HEROKU_PROD_APP_NAME
+heroku config:set USE_BOOTSTRAP_DB=0 --app $HEROKU_PROD_APP_NAME
+heroku config:set USE_BOOTSTRAP_PRUNE_DB=0 --app $HEROKU_PROD_APP_NAME
+heroku config:set COLLECT_STATIC=0 --app $HEROKU_PROD_APP_NAME
+
+heroku git:remote -a $HEROKU_TEST_APP_NAME --remote heroku_test
+heroku git:remote -a $HEROKU_PROD_APP_NAME --remote heroku_prod

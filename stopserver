@@ -1,0 +1,3 @@
+#!/bin/bash
+
+lsof -i :8000,5000 | tail -n +2 | awk '{print $2}' | xargs kill 2> /dev/null

@@ -1,0 +1,16 @@
+django
+django-grappelli
+django-hashedfilenamestorage
+django-filter
+djangorestframework
+drf-yasg
+drf-yasg[validation]
+gunicorn
+django-heroku
+Pillow
+django-nested-admin
+django-admin-sortable2
+django-storages[dropbox]
+ftp_downloader
+geopy
+requests
