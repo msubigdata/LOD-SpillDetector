@@ -22,8 +22,6 @@ import './styleFix';
 import './styles/main.scss';
 import axios from 'axios';
 
-import { useAxios } from '../../../hooks/useAxios';
-
 const southWest = L.latLng(-90, -200);
 const northEast = L.latLng(90, 200);
 const bounds = L.latLngBounds(southWest, northEast);
@@ -32,10 +30,11 @@ export const MapView = ({ markers, activeReg, mapRef, setMapRef }) => {
     const [markerData, setMarkerData] = useState(markers);
 
     const inspectArea = async (area) => {
-        const response = await axios.post('/api/v1/inspect/', {
+        const { data } = await axios.post('/api/v1/inspect/', {
             bbox: area,
         });
-        alert(response.data.water);
+
+        console.log(data);
     };
 
     useEffect(() => {
