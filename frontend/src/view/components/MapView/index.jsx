@@ -21,6 +21,8 @@ import L from 'leaflet';
 import './styleFix';
 import './styles/main.scss';
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWater, faHome, faRoad } from '@fortawesome/free-solid-svg-icons';
 
 const southWest = L.latLng(-90, -200);
 const northEast = L.latLng(90, 200);
@@ -28,13 +30,20 @@ const bounds = L.latLngBounds(southWest, northEast);
 
 export const MapView = ({ markers, activeReg, mapRef, setMapRef }) => {
     const [markerData, setMarkerData] = useState(markers);
+    const badgeIcons = {
+        water: faWater,
+        home: faHome,
+        road: faRoad,
+    };
+
+    const [inspectBadge, setInspectBadge] = useState([]);
 
     const inspectArea = async (area) => {
         const { data } = await axios.post('/api/v1/inspect/', {
             bbox: area,
         });
 
-        console.log(data);
+        setInspectBadge([...data]);
     };
 
     useEffect(() => {
@@ -83,16 +92,6 @@ export const MapView = ({ markers, activeReg, mapRef, setMapRef }) => {
                     bounds={marker.area[0]}
                     pathOptions={{ color: marker.color }}
                 />
-                <Rectangle
-                    fill={false}
-                    bounds={marker.area[1]}
-                    pathOptions={{ color: 'purple' }}
-                />
-                <Rectangle
-                    fill={false}
-                    bounds={marker.area[2]}
-                    pathOptions={{ color: 'gray' }}
-                />
                 <ImageOverlay
                     bounds={marker.area[0]}
                     url={closest(date, timestamps).url || ''}
@@ -100,7 +99,6 @@ export const MapView = ({ markers, activeReg, mapRef, setMapRef }) => {
                 <Marker
                     eventHandlers={{
                         click: () => {
-                            inspectArea(marker.area[0]);
                             mapRef.setView(
                                 [
                                     (marker.area[0][1][0] +
@@ -120,7 +118,7 @@ export const MapView = ({ markers, activeReg, mapRef, setMapRef }) => {
                         (marker.area[0][1][1] + marker.area[0][0][1]) / 2,
                     ]}
                 >
-                    <Popup className="popup">
+                    <Popup className="popup" style={{ opacity: '0.3' }}>
                         <div className="slider_wrapper">
                             <h6>
                                 {new Date(date * 1000).toLocaleDateString()}
@@ -142,6 +140,16 @@ export const MapView = ({ markers, activeReg, mapRef, setMapRef }) => {
                                     };
                                 })}
                             />
+                            <div className="justify-content-center d-flex">
+                                <FontAwesomeIcon
+                                    icon={faWater}
+                                    color="#489be5"
+                                    style={{
+                                        fontSize: '25px',
+                                        margin: '10px',
+                                    }}
+                                />
+                            </div>
                         </div>
                     </Popup>
                 </Marker>
@@ -171,7 +179,6 @@ export const MapView = ({ markers, activeReg, mapRef, setMapRef }) => {
                 preferCanvas
             >
                 <TileLayer url="http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" />
-                {/* TODO Кусок  */}
                 <MarkerClusterGroup>
                     {markerData?.map((m, i) => {
                         const timestamps = [

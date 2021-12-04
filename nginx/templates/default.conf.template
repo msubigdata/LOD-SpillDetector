@@ -38,4 +38,8 @@ server {
         proxy_redirect off;
         proxy_pass http://backend;
     }
+
+    location /media {
+        root /app;
+    }
 }

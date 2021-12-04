@@ -28,7 +28,7 @@ def create_markers(label):
         if last_file['name'] == item['filename'].split('-')[1].split('_')[0]:
             markers[last_file['id']]['images'].append({
                 'timestamp': item['timestamp'],
-                'url': f"api/media/{item['filename']}"
+                'url': f"/media/{label}/{item['filename']}"
             })
             continue
         else:
@@ -46,7 +46,7 @@ def create_markers(label):
             'images': [
                 {
                     'timestamp': item['timestamp'],
-                    'url': f"/api/media/{label}/{item['filename']}"
+                    'url': f"/media/{label}/{item['filename']}"
                 }
             ]
         })

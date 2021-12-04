@@ -68,9 +68,7 @@ const Map = ({ active }) => {
                                     className="marker_img"
                                 />
                                 <div className="text_wrapper">
-                                    <span>Сильный уровень загрязнения,</span>
-                                    <span>More Info</span>
-                                    <span>More Test Info</span>
+                                    <span>Сильный уровень загрязнения</span>
                                 </div>
                             </button>
                         );

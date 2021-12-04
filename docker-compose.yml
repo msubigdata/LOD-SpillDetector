@@ -26,6 +26,7 @@ services:
     volumes:
       - ./nginx/templates:/etc/nginx/templates:rw,cached
       - frontend_build:/app/
+      - media_volume:/app/media/
     depends_on:
       - db
       - backend
