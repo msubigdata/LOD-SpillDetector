@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { MapView } from 'view/components/MapView';
 import test from 'assets/icons/marker-alert.svg';
-import marker from './markers-2017.json';
 import './styles/main.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWater } from '@fortawesome/free-solid-svg-icons';
+import marker from './markers-2017.json';
 
 const Map = ({ active }) => {
     const [drawerIsOpen, setDrawerIsOpen] = useState(false);
@@ -70,6 +72,14 @@ const Map = ({ active }) => {
                                 <div className="text_wrapper">
                                     <span>Сильный уровень загрязнения</span>
                                 </div>
+                                <FontAwesomeIcon
+                                    icon={faWater}
+                                    color="#489be5"
+                                    style={{
+                                        fontSize: '25px',
+                                        margin: '10px',
+                                    }}
+                                />
                             </button>
                         );
                     })}
