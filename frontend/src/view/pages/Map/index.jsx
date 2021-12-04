@@ -6,14 +6,17 @@ import './styles/main.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWater } from '@fortawesome/free-solid-svg-icons';
 import marker from './markers-2017.json';
+import spillMarker from './markers-spill.json';
 
 const Map = ({ active }) => {
     const [drawerIsOpen, setDrawerIsOpen] = useState(false);
     const [markers, setMarkers] = useState(marker);
+    const [spillMarkers, setSpillMarker] = useState(spillMarker);
 
     useEffect(() => {
         setMarkers(marker);
-    }, [marker]);
+        setSpillMarker(spillMarker);
+    }, [marker, spillMarker]);
 
     const [mapRef, setMapRef] = useState(null);
 
@@ -39,6 +42,7 @@ const Map = ({ active }) => {
         <main className="main_wrapper">
             <MapView
                 markers={markers}
+                spillMarkers={spillMarker}
                 activeReg={active}
                 setMapRef={setMapRef}
                 mapRef={mapRef}

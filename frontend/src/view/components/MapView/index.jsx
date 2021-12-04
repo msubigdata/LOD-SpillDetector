@@ -28,7 +28,13 @@ const southWest = L.latLng(-90, -200);
 const northEast = L.latLng(90, 200);
 const bounds = L.latLngBounds(southWest, northEast);
 
-export const MapView = ({ markers, activeReg, mapRef, setMapRef }) => {
+export const MapView = ({
+    markers,
+    spillMarkers,
+    activeReg,
+    mapRef,
+    setMapRef,
+}) => {
     const [markerData, setMarkerData] = useState(markers);
     const badgeIcons = {
         water: faWater,
@@ -96,6 +102,7 @@ export const MapView = ({ markers, activeReg, mapRef, setMapRef }) => {
                     bounds={marker.area[0]}
                     url={closest(date, timestamps).url || ''}
                 />
+
                 <Marker
                     eventHandlers={{
                         click: () => {
@@ -157,6 +164,35 @@ export const MapView = ({ markers, activeReg, mapRef, setMapRef }) => {
         );
     };
 
+    const SpillMapMarker = ({ marker }) => {
+        const ico = () => {
+            if (marker.color === 'red') {
+                return markerIcon;
+            }
+            if (marker.color === 'green') {
+                return markerIconG;
+            }
+            if (marker.color === 'orange') {
+                return markerIconO;
+            }
+            return markerIconY;
+        };
+
+        const markerIco = L.icon({
+            iconUrl: ico(),
+            iconAnchor: [14, 40],
+            popupAnchor: [0, -100],
+            iconSize: [28, 40],
+        });
+
+        return (
+            <>
+                {/* eslint-disable-next-line react/prop-types */}
+                <Marker icon={markerIco} position={marker.area} />
+            </>
+        );
+    };
+
     MapMarker.propTypes = {
         marker: PropTypes.oneOfType([PropTypes.any]).isRequired,
         timestamps: PropTypes.oneOfType([PropTypes.any]),
@@ -164,6 +200,10 @@ export const MapView = ({ markers, activeReg, mapRef, setMapRef }) => {
 
     MapMarker.defaultProps = {
         timestamps: [],
+    };
+
+    SpillMapMarker.propTypes = {
+        marker: PropTypes.oneOfType([PropTypes.any]).isRequired,
     };
 
     return (
@@ -195,6 +235,9 @@ export const MapView = ({ markers, activeReg, mapRef, setMapRef }) => {
                             />
                         );
                     })}
+                    {spillMarkers?.map((m, i) => {
+                        return <SpillMapMarker marker={m} key={`s${i + 1}`} />;
+                    })}
                 </MarkerClusterGroup>
                 <ScaleControl position="bottomright" imperial={false} />
                 <ZoomControl position="bottomright" />
@@ -205,12 +248,14 @@ export const MapView = ({ markers, activeReg, mapRef, setMapRef }) => {
 
 MapView.propTypes = {
     markers: PropTypes.oneOfType([PropTypes.any]),
+    spillMarkers: PropTypes.oneOfType([PropTypes.any]),
     activeReg: PropTypes.oneOfType([PropTypes.any]),
     mapRef: PropTypes.oneOfType([PropTypes.any]),
     setMapRef: PropTypes.func,
 };
 MapView.defaultProps = {
     markers: [],
+    spillMarkers: [],
     activeReg: {},
     mapRef: null,
     setMapRef: () => undefined,

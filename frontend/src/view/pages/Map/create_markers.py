@@ -52,8 +52,27 @@ def create_markers(label):
         })
         last_file['name'] = item['filename'].split('-')[1].split('_')[0]
         last_file['id'] = j
+    open(f'markers-{label}.json', 'w').write(json.dumps(markers))
+
+
+def create_spill_markers(label):
+    dataset = json.loads(open(f'dataset-{label}.json').read())
+
+    colors = ['green', 'orange', 'yellow', 'red']
+    markers = []
+
+    for i, item in enumerate(dataset):
+        if i >= 2000:
+            break
+
+        area = [item['Longitude'], item['Latitude']]
+        markers.append({
+            'area': area,
+            'color': random.choice(colors),
+        })
 
         open(f'markers-{label}.json', 'w').write(json.dumps(markers))
 
 
 create_markers(2017)
+create_spill_markers('spill')
